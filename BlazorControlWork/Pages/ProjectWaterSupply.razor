@@ -1,0 +1,512 @@
+﻿@page "/projectWaterSupply"
+
+@using Microsoft.Extensions.Logging
+
+@using BlazorControlWork.Data
+
+@inject IWebHostEnvironment Environment
+@inject NavigationManager Navigation
+
+@if (user.GetType().Name == "Customer")
+{
+    <h2>Документы застройщика</h2>
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Documents name</th>
+                <th>file</th>
+                <th>ItsOK </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in DeveloperDict)
+            {
+                <tr>
+                    <td>@DeveloperDict[i.Key]</td>
+                    <td> <button type="button" class="btn btn-info" @*@onclick="() => Load()" *@>Load</button> </td>
+                    @if (docs.Find(x => x.Name == DeveloperDict[i.Key]) != null && docs.Find(x => x.Name == DeveloperDict[i.Key]).Name == DeveloperDict[i.Key])
+                    {
+                        <td><input type="checkbox" @bind-value=checkBox></input></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br>
+
+    <h2>Документы планировщика</h2>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Documents name</th>
+                <th>Info</th>
+                <th>ChecBox</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <label>
+                        Диаметр (мм) трубопровода и протяженность
+                        линейного объекта (м)
+                    </label>
+                </td>
+                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text1 /></td>
+                @if (text1 != null && text1 != string.Empty)
+                {
+                    <td><input type="checkbox" @bind-value=checkBox></input></td>
+                }
+            </tr>
+
+            <tr>
+                <td>
+                    <label>
+                        Производительность БОС, м3/сут
+                    </label>
+                </td>
+                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text2 /></td>
+                @if (text2 != null && text2 != string.Empty)
+                {
+                    <td><input type="checkbox" @bind-value=checkBox></input></td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        кол.-во (шт) и производительность КНС (м3
+                        /ч)
+                    </label>
+                </td>
+                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text3 /></td>
+                @if (text3 != null && text3 != string.Empty)
+                {
+                    <td><input type="checkbox" @bind-value=checkBox></input></td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Сметная стоимость работ, тыс. руб.
+                    </label>
+                </td>
+                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text4 /></td>
+                @if (text4 != null && text4 != string.Empty)
+                {
+                    <td><input type="checkbox" @bind-value=checkBox></input></td>
+                }
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Срок разработки проектной документации, месяцев
+                    </label>
+                </td>
+                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text5 /></td>
+                @if (text5 != null && text5 != string.Empty)
+                {
+                    <td><input type="checkbox" @bind-value=checkBox></input></td>
+                }
+            </tr>
+        </tbody>
+    </table>
+    <br>
+}
+
+@if (user.GetType().Name == "Developer")
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Documents name</th>
+                <th>Select file</th>
+                <th>Add to DB</th>
+                <th>Load</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in DeveloperDict)
+            {
+                <tr>
+                    <td>@DeveloperDict[i.Key]</td>
+                    <td> <InputFile OnChange="LoadFiles" /> </td>
+                    <td> <button type="button" class="btn btn-success" @onclick="() => AddToDBDeveloper(DeveloperDict[i.Key])">Add</button> </td>
+                    @if (docs.Find(x => x.Name == DeveloperDict[i.Key]) != null && docs.Find(x => x.Name == DeveloperDict[i.Key]).Name == DeveloperDict[i.Key])
+                    {
+                        <td> <button type="button" class="btn btn-info">Load</button></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (user.GetType().Name == "Designer")
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Documents name</th>
+                <th>Info</th>
+                <th>Add to DB</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <label>
+                        Диаметр (мм) трубопровода и протяженность
+                        линейного объекта (м)
+                    </label>
+                </td>
+                @if (inputBlok1)
+                {
+                    <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text1 /></td>
+                }
+                else
+                {
+                    <td> <input type="text" class="text-muted mb-0" @bind-value=text1 /></td>
+                }
+                <td> <button type="button" class="btn btn-info" @onclick="() => Edit(0)">Edit</button> </td>
+                <td>
+                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(0)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label>
+                        Производительность БОС, м3/сут
+                    </label>
+                </td>
+                @if (inputBlok2)
+                {
+                    <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text2 /></td>
+                }
+                else
+                {
+                    <td> <input type="text" class="text-muted mb-0" @bind-value=text2 /></td>
+                }
+                <td> <button type="button" class="btn btn-info" @onclick="() => Edit(1)">Edit</button> </td>
+                <td>
+                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(1)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label>
+                        кол.-во (шт) и производительность КНС (м3
+                        /ч)
+                    </label>
+                </td>
+                @if (inputBlok3)
+                {
+                    <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text3 /></td>
+                }
+                else
+                {
+                    <td> <input type="text" class="text-muted mb-0" @bind-value=text3 /></td>
+                }
+                <td> <button type="button" class="btn btn-info" @onclick="() => Edit(2)">Edit</button> </td>
+                <td>
+                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(2)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Сметная стоимость работ, тыс. руб.
+                    </label>
+                </td>
+                @if (inputBlok4)
+                {
+                    <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text4 /></td>
+                }
+                else
+                {
+                    <td> <input type="text" class="text-muted mb-0" @bind-value=text4 /></td>
+                }
+                <td> <button type="button" class="btn btn-info" @onclick="() => Edit(3)">Edit</button> </td>
+                <td>
+                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(3)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        Срок разработки проектной документации, месяцев
+                    </label>
+                </td>
+                @if (inputBlok5)
+                {
+                    <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text5 /></td>
+                }
+                else
+                {
+                    <td> <input type="text" class="text-muted mb-0" @bind-value=text5 /></td>
+                }
+                <td> <button type="button" class="btn btn-info" @onclick="() => Edit(4)">Edit</button> </td>
+                <td>
+                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(4)">
+                        Add
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private IBrowserFile loadedFile;
+    private IBrowserFile File;
+    User user;
+    string tr;
+    List<DeveloperDocument> docs;
+    List<DesignerDocument> docss;
+    string text = string.Empty;
+    bool checkBox;
+    string text1 = string.Empty;
+    string text2 = string.Empty;
+    string text3 = string.Empty;
+    string text4 = string.Empty;
+    string text5 = string.Empty;
+    bool inputBlok1 = true;
+    bool inputBlok2 = true;
+    bool inputBlok3 = true;
+    bool inputBlok4 = true;
+    bool inputBlok5 = true;
+
+    protected override void OnInitialized()
+    {
+
+        switch (ActiveUser.user.GetType().Name)
+        {
+            case "Customer":
+                //user = ActiveUser.user as Customer;
+                docs = ActiveUser.project.Documents;
+                docss = ActiveUser.project.Documentss;
+                if (docss.Find(x => x.Name == DesignerDict[0]) != null && docss.Find(x => x.Name == DesignerDict[0]).Name == DesignerDict[0])
+                {
+                    text1 = docss.Find(x => x.Name == DesignerDict[0]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[1]) != null && docss.Find(x => x.Name == DesignerDict[1]).Name == DesignerDict[1])
+                {
+                    text2 = docss.Find(x => x.Name == DesignerDict[1]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[2]) != null && docss.Find(x => x.Name == DesignerDict[2]).Name == DesignerDict[2])
+                {
+                    text3 = docss.Find(x => x.Name == DesignerDict[2]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[3]) != null && docss.Find(x => x.Name == DesignerDict[3]).Name == DesignerDict[3])
+                {
+                    text4 = docss.Find(x => x.Name == DesignerDict[3]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[4]) != null && docss.Find(x => x.Name == DesignerDict[4]).Name == DesignerDict[4])
+                {
+                    text5 = docss.Find(x => x.Name == DesignerDict[4]).Text;
+                }
+                break;
+                break;
+            case "Developer":
+                user = ActiveUser.user as Developer;
+                docs = ActiveUser.project.Documents;
+                break;
+            case "Planner":
+                user = ActiveUser.user as Designer;
+                docss = ActiveUser.project.Documentss;
+
+                if (docss.Find(x => x.Name == DesignerDict[0]) != null && docss.Find(x => x.Name == DesignerDict[0]).Name == DesignerDict[0])
+                {
+                    text1 = docss.Find(x => x.Name == DesignerDict[0]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[1]) != null && docss.Find(x => x.Name == DesignerDict[1]).Name == DesignerDict[1])
+                {
+                    text2 = docss.Find(x => x.Name == DesignerDict[1]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[2]) != null && docss.Find(x => x.Name == DesignerDict[2]).Name == DesignerDict[2])
+                {
+                    text3 = docss.Find(x => x.Name == DesignerDict[2]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[3]) != null && docss.Find(x => x.Name == DesignerDict[3]).Name == DesignerDict[3])
+                {
+                    text4 = docss.Find(x => x.Name == DesignerDict[3]).Text;
+                }
+                if (docss.Find(x => x.Name == DesignerDict[4]) != null && docss.Find(x => x.Name == DesignerDict[4]).Name == DesignerDict[4])
+                {
+                    text5 = docss.Find(x => x.Name == DesignerDict[4]).Text;
+                }
+                break;
+        }
+    }
+
+
+    //private void CheckingBox(int text)
+    //{
+    //    switch (text)
+    //    {
+    //        case 10:
+
+    //            break;
+    //        case -10:
+    //            if (docss.Find(x => x.Name == PlannerDict[0]) != null)
+    //            {
+    //                docss.Find(x => x.Name == PlannerDict[0]).ItsOK =
+    //            }
+    //            break;
+    //    }
+    //}
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        loadedFile = e.File;
+        var path = Path.Combine(Environment.ContentRootPath,
+                "wwwroot", "files",
+            loadedFile.Name);
+        await using FileStream fs = new(path, FileMode.Create);
+        await loadedFile.OpenReadStream(10000000000000).CopyToAsync(fs);
+    }
+
+    private void Edit(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                inputBlok1 = false;
+                break;
+            case 1:
+                inputBlok2 = false;
+                break;
+            case 2:
+                inputBlok3 = false;
+                break;
+            case 3:
+                inputBlok4 = false;
+                break;
+            case 4:
+                inputBlok5 = false;
+                break;
+
+        }
+    }
+
+    private void AddToDB(int i)
+    {
+        var newDocs = new DesignerDocument(DesignerDict[i], false);
+        if (docss.Find(x => x.Name == DesignerDict[i]) != null)
+        {
+            ActiveUser.project.Documentss.Remove(docss.Find(x => x.Name == DesignerDict[i]));
+        }
+        switch (i)
+        {
+            case 0:
+                if (text1 != null && text1 != string.Empty)
+                {
+                    newDocs.Text = text1;
+                    inputBlok1 = false;
+                }
+                else
+                    return;
+                break;
+            case 1:
+                if (text2 != null && text2 != string.Empty)
+                {
+                    newDocs.Text = text2;
+                    inputBlok2 = false;
+                }
+                else
+                    return;
+                break;
+            case 2:
+                if (text3 != null && text3 != string.Empty)
+                {
+                    newDocs.Text = text3;
+                    inputBlok3 = false;
+                }
+                else
+                    return;
+                break;
+            case 3:
+                if (text4 != null && text4 != string.Empty)
+                {
+                    newDocs.Text = text4;
+                    inputBlok4 = false;
+                }
+                else
+                    return;
+                break;
+            case 4:
+                if (text5 != null && text5 != string.Empty)
+                {
+                    newDocs.Text = text5;
+                    inputBlok5 = false;
+                }
+                else
+                    return;
+                break;
+        }
+
+        ActiveUser.project.Documentss.Add(newDocs);
+        MongoExamples.ReplaceProject(ActiveUser.project.Name, ActiveUser.project);
+    }
+
+    private void AddToDBDeveloper(string fileName)
+    {
+        if (loadedFile != null)
+        {
+            if (docs.Find(x => x.Name == fileName) != null)
+            {
+                ActiveUser.project.Documents.Remove(docs.Find(x => x.Name == fileName));
+            }
+            string path = Path.Combine(Environment.ContentRootPath,
+                            "wwwroot", "files",
+                            loadedFile.Name);
+            FileSystemService.UploadToDb(loadedFile, path);
+            var newDoc = new DeveloperDocument(fileName, false)
+                {
+                    FileName = loadedFile.Name
+                };
+            ActiveUser.project.Documents.Add(newDoc);
+            MongoExamples.ReplaceProject(ActiveUser.project.Name, ActiveUser.project);
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    Dictionary<int, string> DeveloperDict = new Dictionary<int, string>()
+    { {0, "Акт обследования и выбора трассы сети водоснабжения" },
+      {1, "Акт обследования и выбора места под проектируемую скважину" },
+      {2, "Согласованный ситуационной план (М1:10000 или М1:25000) с нанесением источников воды (скважин, родников и т.п.), существующих водонапорных башен, предполагаемой трассой водопровода и места врезки в существующую сеть" },
+      {3, "План населённого пункта в М1:1000 или М1:500 (топографическая съемка)" },
+      {4, "Техинические условия на водоснабжение" },
+      {5, "Техинические условия на электроснабжение (для насосной станции первого или второго подъема" },
+      {6, "Градостроительный план земельного участка" },
+      {7, "Справка согласования с собственниками земельных участков" },
+      {8, "Докумен, подтверждающий проведение межевания с присвоением кадастрового номера земельного участка под строительство водопровода и сооружений на нем" },
+      {9, "Заключение Органа Ростпотребнадзора санитарно-эпидемиологической службы по отводу" },
+      {10, "Сведения о наличии водозаборных скважин (рдников) на территории хозяйства" },
+    };
+
+    Dictionary<int, string> DesignerDict = new Dictionary<int, string>()
+    {
+      {0, "Диаметр (мм) трубопровода и протяженность линейного объекта (м)" },
+      {1, "Производительность БОС, м3/сут" },
+      {2, "кол.-во (шт) и производительность КНС (м3/ч)" },
+      {3, "Сметная стоимость работ, тыс. руб." },
+      {4, "Срок разработки проектной документации, месяцев" },
+    };
+}
+
+
