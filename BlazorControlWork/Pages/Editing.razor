@@ -2,219 +2,231 @@
 
 <PageTitle>Editing</PageTitle>
 
-@using BlazorControlWork.Data
-@inject NavigationManager Navigation
+@namespace BlazorControlWork.Pages
 
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-body">
-    @if (user.GetType().Name == "Customer")
-    {
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Full name</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Name/> 
-            </div>
-        </div>
-        <hr>
-    }
-    @if (user.GetType().Name == "Developer")
-    {
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Name</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Name/>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">OGRN</p>
-            </div>
-            <div class="col-sm-9">
-                            <input type="text" maxlength="13" class="text-muted mb-0" @bind-value=MSRNDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">TIN</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="10" class="text-muted mb-0" @bind-value=TINDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')"/>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">KPP</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="9" class="text-muted mb-0" @bind-value=CORDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Address</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Address />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">HeadName</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Head />
-            </div>
-        </div>
-        <hr>
-    }
-    @if (user.GetType().Name == "Designer")
-    {
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Name organization</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Administrant />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">OGRN</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="13" class="text-muted mb-0" @bind-value=MSRNDesigner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">TIN</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="10" class="text-muted mb-0" @bind-value=TINDesigner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">KPP</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="9" class="text-muted mb-0" @bind-value=CORDesigner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Name direcor</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Director />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Name chief engineer</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=MainEngineer />
-            </div>
-        </div>
-        <hr>
-    }
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Email</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" class="text-muted mb-0" @bind-value=Email />
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <p class="mb-0">Phone number</p>
-            </div>
-            <div class="col-sm-9">
-                <input type="text" maxlength="11" class="text-muted mb-0" @bind-value=Telephone onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
-            </div>
-        </div>
-        </div>
-        </div>
-        @if (Error)
-            {
-                <br><div class="alert alert-danger" role="alert">
-                    @ErrorText
+@inject NavigationManager manager
+@inject SingletonServise servise
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Login</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0"> @user.Login </p>
+                    </div>
                 </div>
-            }
-        <button type="button" width="400" id="LogOut"
-                class="btn btn-success" @onclick=SaveEdit>
-            Edit
-        </button> 
+                <hr>
+        @if (user.GetType().Name == "Customer")
+        {
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Full name</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=FullName/> 
+                </div>
+            </div>
+            <hr>
+        }
+        @if (user.GetType().Name == "Developer")
+        {
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Name</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=Name/>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">OGRN</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="13" class="text-muted mb-0" @bind-value=OGRNDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">TIN</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="10" class="text-muted mb-0" @bind-value=TINDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')"/>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">KPP</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="9" class="text-muted mb-0" @bind-value=KPPDeveloper onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=Address />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">HeadName</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=HeadName />
+                </div>
+            </div>
+            <hr>
+        }
+        @if (user.GetType().Name == "Planner")
+        {
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Name organization</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=NameOrganization />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">OGRN</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="13" class="text-muted mb-0" @bind-value=OGRNPlanner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">TIN</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="10" class="text-muted mb-0" @bind-value=TINPlanner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">KPP</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="9" class="text-muted mb-0" @bind-value=KPPPlanner onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Name direcor</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=NameDirecor />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Name chief engineer</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=NameChiefEngineer />
+                </div>
+            </div>
+            <hr>
+        }
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="text-muted mb-0" @bind-value=Email />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Phone number</p>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" maxlength="11" class="text-muted mb-0" @bind-value=PhoneNumber onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                </div>
+            </div>
+            </div>
+            </div>
+            @if (Error)
+                {
+                    <br><div class="alert alert-danger" role="alert">
+                        @ErrorText
+                    </div>
+                }
+            <button type="button" width="400" id="LogOut"
+                    class="btn btn-success" @onclick=SaveEdit>
+                Edit
+            </button> 
+        </div>
     </div>
-</div>
 
 @code {
     User user;
-    string Telephone = string.Empty;
+    string PhoneNumber = string.Empty;
     string Email = string.Empty;
-    string Name = string.Empty;
+    string FullName = string.Empty;
     string Department = string.Empty;
-    string MSRNDeveloper = string.Empty;
+    string Name = string.Empty;
+    string OGRNDeveloper = string.Empty;
     string TINDeveloper = string.Empty;
-    string CORDeveloper = string.Empty;
-    string MSRNDesigner = string.Empty;
-    string TINDesigner = string.Empty;
-    string CORDesigner = string.Empty;
+    string KPPDeveloper = string.Empty;
+    string OGRNPlanner = string.Empty;
+    string TINPlanner = string.Empty;
+    string KPPPlanner = string.Empty;
     string Address = string.Empty;
-    string Head = string.Empty;
-    string Administrant = string.Empty;
-    string Director = string.Empty;
-    string MainEngineer = string.Empty;
+    string HeadName = string.Empty;
+    string NameOrganization = string.Empty;
+    string NameDirecor = string.Empty;
+    string NameChiefEngineer = string.Empty;
     bool Error = false;
     string ErrorText = string.Empty;
 
     protected override void OnInitialized()
     {
-        user = ActiveUser.user;
+        user = servise.GetUser();
         Email = user.Email;
-        Telephone = user.Telephone;
+        PhoneNumber = user.PhoneNumber;
         switch (user.GetType().Name)
         {
             case "Customer":
-                Name = (user as Customer).Name;
+                FullName = (user as Customer).FullName;
                 Department = (user as Customer).Department;
                 break;
 
             case "Developer":
-                //Name = (user as Developer).Name;
-                MSRNDeveloper = (user as Developer).MSRN;
+                Name = (user as Developer).Name;
+                OGRNDeveloper = (user as Developer).OGRN;
                 TINDeveloper = (user as Developer).TIN;
-                CORDeveloper = (user as Developer).COR;
+                KPPDeveloper = (user as Developer).KPP;
                 Address = (user as Developer).Address;
-                Head = (user as Developer).Head;
+                HeadName = (user as Developer).HeadName;
                 break;
 
-            case "Designer":
-                MSRNDesigner = (user as Designer).MSRN;
-                TINDesigner = (user as Designer).TIN;
-                CORDesigner = (user as Designer).COR;
-                Administrant = (user as Designer).Administrant;
-                Director = (user as Designer).Director;
-                MainEngineer = (user as Designer).MainEngineer;
+            case "Planner":
+                OGRNPlanner = (user as Planner).OGRN;
+                TINPlanner = (user as Planner).TIN;
+                KPPPlanner = (user as Planner).KPP;
+                NameOrganization = (user as Planner).NameOrganization;
+                NameDirecor = (user as Planner).NameDirecor;
+                NameChiefEngineer = (user as Planner).NameChiefEngineer;
                 break;
         }
     }
@@ -226,16 +238,11 @@
         switch (user.GetType().Name)
         {
             case "Customer":
-                if (Name == string.Empty || Email == string.Empty)
-                {
-                    Error = true;
-                    ErrorText = "Заполните все поля!";
-                }
                 if(Error == false)
                 {
-                    newUser = new Customer(Telephone, Email, user.Password, user.Login, (user as Customer).Department)
+                    newUser = new Customer(user.Login, PhoneNumber, Email, user.Password)
                     {
-                        Name = this.Name,
+                        FullName = this.FullName,
                         Department = this.Department,
                     };
                 }
@@ -246,22 +253,16 @@
 
                 break;
             case "Developer":
-                if (Email == string.Empty || MSRNDeveloper == string.Empty || TINDeveloper == string.Empty || 
-                    CORDeveloper == string.Empty || Address == string.Empty || Head == string.Empty)
-                {
-                    Error = true;
-                    ErrorText = "Заполните все поля!";
-                }
                 if(Error == false)
                 {
-                    newUser = new Developer(Telephone, Email, user.Password, user.Login)
+                    newUser = new Developer(user.Login, PhoneNumber, Email, user.Password)
                     {
-                        //Name = this.Name,
-                        MSRN = this.MSRNDeveloper,
+                        Name = this.Name,
+                        OGRN = this.OGRNDeveloper,
                         TIN = this.TINDeveloper,
-                        COR = this.CORDeveloper,
+                        KPP = this.KPPDeveloper,
                         Address = this.Address,
-                        Head = this.Head,
+                        HeadName = this.HeadName,
                     };
                 }
                 else
@@ -271,23 +272,17 @@
 
                 break;
 
-            case "Designer":
-                if (Email == string.Empty || Administrant == string.Empty || MSRNDesigner == string.Empty ||
-                    TINDesigner == string.Empty || CORDesigner == string.Empty || Director == string.Empty || MainEngineer == string.Empty)
-                {
-                    Error = true;
-                    ErrorText = "Заполните все поля!";
-                }
+            case "Planner":
                 if(Error == false)
                 {
-                    newUser = new Designer(Telephone, Email, user.Password, user.Login)
+                    newUser = new Planner(user.Login, PhoneNumber, Email, user.Password)
                     {
-                        Administrant = this.Administrant,
-                        MSRN = MSRNDesigner,
-                        TIN = TINDesigner,
-                        COR = CORDesigner,
-                        Director = this.Director,
-                        MainEngineer = this.MainEngineer,
+                        NameOrganization = this.NameOrganization,
+                        OGRN = OGRNPlanner,
+                        TIN = TINPlanner,
+                        KPP = KPPPlanner,
+                        NameDirecor = this.NameDirecor,
+                        NameChiefEngineer = this.NameChiefEngineer,
                     };
                 }
                 else
@@ -296,17 +291,27 @@
                 }
                 break;
         }
-        MongoExamples.Replace(user.Login, newUser);
-        ActiveUser.user = newUser;
-        Navigation.NavigateTo("profile");
+        Mongo.Replace(user.Login, newUser);
+        servise.SetUser(newUser);
+        manager.NavigateTo("profile");
     }
 
     private void Check()
     {
-        if (Telephone != string.Empty && Telephone.Length != 11)
+        if (!Email.Contains('@'))
         {
             Error = true;
-            ErrorText = "Неверный формат ввода!";
+            ErrorText = "Неверный формат ввода";
+            return;
+        }
+        else
+        {
+            Error = false;
+        }
+        if (PhoneNumber != string.Empty && PhoneNumber.Length != 11)
+        {
+            Error = true;
+            ErrorText = "Неверный формат ввода";
             return;
         }
         else
@@ -316,21 +321,21 @@
         switch (user.GetType().Name)
         {
             case "Developer":
-                if ((MSRNDeveloper != null && MSRNDeveloper != string.Empty && MSRNDeveloper.Length != 13) ||
-                    (TINDeveloper != null && TINDeveloper != string.Empty && TINDeveloper.Length != 10) || (CORDeveloper != null && CORDeveloper != string.Empty && CORDeveloper.Length != 9))
+                if ((OGRNDeveloper != null && OGRNDeveloper != string.Empty && OGRNDeveloper.Length != 13) ||
+                    (TINDeveloper != null && TINDeveloper != string.Empty && TINDeveloper.Length != 10) || (KPPDeveloper != null && KPPDeveloper != string.Empty && KPPDeveloper.Length != 9))
                 {
                     Error = true;
-                    ErrorText = "Неверный формат ввода!";
+                    ErrorText = "Неверный формат ввода";
                     return;
                 }
                 break;
 
-            case "Designer":
-                if ((MSRNDesigner != null && MSRNDesigner != string.Empty && MSRNDesigner.Length != 13) ||
-                    (TINDesigner != null && TINDesigner != string.Empty && TINDesigner.Length != 10) || (CORDesigner != null && CORDesigner != string.Empty && CORDesigner.Length != 9))
+            case "Planner":
+                if ((OGRNPlanner != null && OGRNPlanner != string.Empty && OGRNPlanner.Length != 13) ||
+                    (TINPlanner != null && TINPlanner != string.Empty && TINPlanner.Length != 10) || (KPPPlanner != null && KPPPlanner != string.Empty && KPPPlanner.Length != 9))
                 {
                     Error = true;
-                    ErrorText = "Неверный формат ввода!";
+                    ErrorText = "Неверный формат ввода";
                     return;
                 }
                 break;

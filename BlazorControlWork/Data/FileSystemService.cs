@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using MongoDB.Driver.GridFS;
 using MongoDB.Driver;
-using MongoDB.Driver.GridFS;
+using Microsoft.AspNetCore.Components.Forms;
 
-namespace BlazorControlWork.Data
+namespace BlazorControlWork
 {
-    public static class FileSystemService
+    public class FileSystemService
     {
-        public static void UploadToDb(IBrowserFile file, string path)
+        public void UploadToDb(IBrowserFile file, string path)
         {
             var client = new MongoClient("mongodb://localhost");
-            var database = client.GetDatabase("UsersDataBaseArt");
+            var database = client.GetDatabase("UserBaseGuz");
             var gridFS = new GridFSBucket(database);
 
             using (FileStream fs = new FileStream($"{path}", FileMode.Open))
@@ -18,15 +18,15 @@ namespace BlazorControlWork.Data
             }
         }
 
-        static public void DownloadToLocal(User user, string path)
+        public void DownloadToLocal(string name)
         {
-            /*var client = new MongoClient("mongodb://localhost");
-            var database = client.GetDatabase("Images321");
+            var client = new MongoClient("mongodb://localhost");
+            var database = client.GetDatabase("UserBaseGuz");
             var gridFS = new GridFSBucket(database);
-            using (FileStream fs = new FileStream(path, FileMode.CreateNew))
+            using (FileStream fs = new FileStream($"{Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/DownLoadsFiles/")}{name}", FileMode.CreateNew))
             {
-                gridFS.DownloadToStreamByName(user.pathImg.Substring(7), fs);
-            }*/
+                gridFS.DownloadToStreamByName($"{name}", fs);
+            }
         }
     }
 }

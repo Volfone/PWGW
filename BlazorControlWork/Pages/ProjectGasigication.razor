@@ -1,4 +1,4 @@
-﻿@page "/projectWaterSupply"
+﻿@page "/projectGasification"
 
 @using Microsoft.Extensions.Logging
 @namespace BlazorControlWork.Data
@@ -7,8 +7,7 @@
 @inject SingletonServise servise
 @inject NavigationManager manager
 
-
-@if(user.GetType().Name == "Customer")
+@if (user.GetType().Name == "Customer")
 {
     <h2>Документы застройщика</h2>
     <br>
@@ -42,7 +41,8 @@
                 </tr>
             }
         </tbody>
-    </table> <br>
+    </table>
+    <br>
 
     <h2>Документы планировщика</h2>
     <br>
@@ -52,6 +52,7 @@
             <tr>
                 <th>Documents name</th>
                 <th>Info</th>
+                <th>Check</th>
                 <th>State</th>
             </tr>
         </thead>
@@ -59,12 +60,11 @@
             <tr>
                 <td>
                     <label>
-                        Диаметр (мм) трубопровода и протяженность
-                        линейного объекта (м)
+                        Диаметр (мм) трубопровода и протяженность линейного объекта (м)
                     </label>
                 </td>
                 <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text1 /></td>
-                @if (text1 != null && text1 != string.Empty)
+                @if(text1 != null && text1 != string.Empty)
                 {
                     <td> <button type="button" class="btn btn-info" @onclick="() => Apply(docss.Find(x => x.Name == PlannerDict[0]).Name)">Apply</button> </td>
                 }
@@ -73,7 +73,6 @@
                     <td> <lable> Подтвержден</lable></td>
                 }
             </tr>
-
             <tr>
                 <td>
                     <label>
@@ -81,7 +80,7 @@
                     </label>
                 </td>
                 <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text2 /></td>
-                @if (text2 != null && text2 != string.Empty)
+                @if(text2 != null && text2 != string.Empty)
                 {
                     <td> <button type="button" class="btn btn-info" @onclick="() => Apply(docss.Find(x => x.Name == PlannerDict[1]).Name)">Apply</button> </td>
                 }
@@ -90,6 +89,7 @@
                     <td> <lable> Подтвержден</lable></td>
                 }
             </tr>
+
             <tr>
                 <td>
                     <label>
@@ -107,38 +107,7 @@
                     <td> <lable> Подтвержден</lable></td>
                 }
             </tr>
-            <tr>
-                <td>
-                    <label>
-                        Сметная стоимость работ, тыс. руб.
-                    </label>
-                </td>
-                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text4 /></td>
-                @if (text3 != null && text4 != string.Empty)
-                {
-                    <td> <button type="button" class="btn btn-info" @onclick="() => Apply(docss.Find(x => x.Name == PlannerDict[3]).Name)">Apply</button> </td>
-                }
-                @if (docss.Find(x => x.Name == PlannerDict[3]) != null && docss.Find(x => x.Name == PlannerDict[3]).ItsOK == true)
-                {
-                    <td> <lable> Подтвержден</lable></td>
-                }
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        Срок разработки проектной документации, месяцев
-                    </label>
-                </td>
-                <td> <input type="text" readonly class="text-muted mb-0" @bind-value=text5 /></td>
-                @if (text3 != null && text5 != string.Empty)
-                {
-                    <td> <button type="button" class="btn btn-info" @onclick="() => Apply(docss.Find(x => x.Name == PlannerDict[4]).Name)">Apply</button> </td>
-                }
-                @if (docss.Find(x => x.Name == PlannerDict[4]) != null && docss.Find(x => x.Name == PlannerDict[4]).ItsOK == true)
-                {
-                    <td> <lable> Подтвержден</lable></td>
-                }
-            </tr>
+
         </tbody>
     </table>
     <br>
@@ -151,17 +120,19 @@
             <tr>
                 <th>Documents name</th>
                 <th>Select file</th>
-                <th>Add to DB</th>
+                <th>Add to DB</th>@*
+                <th>Load</th>*@
             </tr>
         </thead>
         <tbody>
             @foreach (var i in DeveloperDict)
             {
                 <tr>
+                    <td>@DeveloperDict[i.Key]</td>
                     @if (docs.Find(x => x.Name == DeveloperDict[i.Key]) != null && docs.Find(x => x.Name == DeveloperDict[i.Key]).Name == DeveloperDict[i.Key])
                     {
                         <td> <lable>@docs.Find(x => x.Name == DeveloperDict[i.Key]).FileName</lable></td>
-                        <td> <button type="button" class="btn btn-success" @onclick="() => DeleteFromDBDeveloper(DeveloperDict[i.Key])">Delete</button> </td>
+                        <td> <button type="button" class="btn btn-danger" @onclick="() => DeleteFromDBDeveloper(DeveloperDict[i.Key])">Delete</button> </td>
                     }
                     else
                     {
@@ -172,6 +143,10 @@
                     {
                         <td> <lable> Подтвержден</lable></td>
                     }
+                    @*@if (docs.Find(x => x.Name == DeveloperDict[i.Key]) != null && docs.Find(x => x.Name == DeveloperDict[i.Key]).Name == DeveloperDict[i.Key])
+                    {
+                        <td> <button type="button" class="btn btn-info">Load</button></td>
+                    }*@
                 </tr>
             }
         </tbody>
@@ -191,45 +166,42 @@
                 <tr>
                     <td>
                         <label>
-                        Диаметр (мм) трубопровода и протяженность
-                        линейного объекта (м)
-                    </label>
+                        Диаметр (мм) трубопровода и протяженность линейного объекта (м)
+                        </label>
+                    </td>
                 <td> <input type="text" class="text-muted mb-0" @bind-value=text1 /></td>
                 <td>
                     <button type="button" class="btn btn-success" @onclick="() => AddToDB(0)">
                         Add
                     </button>
                 </td>
-                    @if (docss.Find(x => x.Name == PlannerDict[0]) != null && docss.Find(x => x.Name == PlannerDict[0]).ItsOK == true)
-                    {
+                @if (docss.Find(x => x.Name == PlannerDict[0]) != null && docss.Find(x => x.Name == PlannerDict[0]).ItsOK == true)
+                {
                     <td> <lable> Подтвержден</lable></td>
-                    }
-                    </td>
+                }
             </tr>
-
-            <tr>
-                <td>
-                    <label>
-                        Производительность БОС, м3/сут
-                    </label>
-                </td>
+             <tr>
+                    <td>
+                        <label>
+                            Производительность БОС, м3/сут
+                        </label>
+                    </td>
                 <td> <input type="text" class="text-muted mb-0" @bind-value=text2 /></td>
                 <td>
                     <button type="button" class="btn btn-success" @onclick="() => AddToDB(1)">
                         Add
                     </button>
                 </td>
-                    @if (docss.Find(x => x.Name == PlannerDict[1]) != null && docss.Find(x => x.Name == PlannerDict[1]).ItsOK == true)
-                    {
+                @if (docss.Find(x => x.Name == PlannerDict[1]) != null && docss.Find(x => x.Name == PlannerDict[1]).ItsOK == true)
+                {
                     <td> <lable> Подтвержден</lable></td>
-                    }
+                }
             </tr>
-
-                    <tr>
+                <tr>
                     <td>
                         <label>
-                        кол.-во (шт) и производительность КНС (м3
-                        /ч)
+                            кол.-во (шт) и производительность КНС (м3
+                            /ч)
                         </label>
                     </td>
                 <td> <input type="text" class="text-muted mb-0" @bind-value=text3 /></td>
@@ -243,42 +215,13 @@
                     <td> <lable> Подтвержден</lable></td>
                 }
             </tr>
-                    <tr>
-                    <td>
-                        <label>
-                            Сметная стоимость работ, тыс. руб.
-                        </label>
-                </td>
-                <td> <input type="text" class="text-muted mb-0" @bind-value=text3 /></td>
-                <td>
-                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(3)">
-                        Add
-                    </button>
-                </td>
-                @if (docss.Find(x => x.Name == PlannerDict[3]) != null && docss.Find(x => x.Name == PlannerDict[3]).ItsOK == true)
-                {
-                    <td> <lable> Подтвержден</lable></td>
-                }
-            </tr>
-            <tr>
-                    <td>
-                        <label>
-                        Срок разработки проектной документации, месяцев
-                        </label>
-                </td>
-                <td> <input type="text" class="text-muted mb-0" @bind-value=text3 /></td>
-                <td>
-                    <button type="button" class="btn btn-success" @onclick="() => AddToDB(4)">
-                        Add
-                    </button>
-                </td>
-                @if (docss.Find(x => x.Name == PlannerDict[4]) != null && docss.Find(x => x.Name == PlannerDict[4]).ItsOK == true)
-                {
-                    <td> <lable> Подтвержден</lable></td>
-                }
-            </tr>
+
             </tbody>
         </table>
+}
+else
+{
+    
 }
 
 
@@ -289,22 +232,17 @@
     string tr;
     List<DeveloperDocument> docs;
     List<PlannerDocument> docss;
-    string text = string.Empty;
-    bool checkBox;
     string text1 = string.Empty;
     string text2 = string.Empty;
     string text3 = string.Empty;
-    string text4 = string.Empty;
-    string text5 = string.Empty;
+    bool checkBox;
     bool inputBlok1 = true;
     bool inputBlok2 = true;
     bool inputBlok3 = true;
-    bool inputBlok4 = true;
-    bool inputBlok5 = true;
+
 
     protected override void OnInitialized()
     {
-
         switch (servise.GetUser().GetType().Name)
         {
             case "Customer":
@@ -323,15 +261,6 @@
                 {
                     text3 = docss.Find(x => x.Name == PlannerDict[2]).Text;
                 }
-                if (docss.Find(x => x.Name == PlannerDict[3]) != null && docss.Find(x => x.Name == PlannerDict[3]).Name == PlannerDict[3])
-                {
-                    text4 = docss.Find(x => x.Name == PlannerDict[3]).Text;
-                }
-                if (docss.Find(x => x.Name == PlannerDict[4]) != null && docss.Find(x => x.Name == PlannerDict[4]).Name == PlannerDict[4])
-                {
-                    text5 = docss.Find(x => x.Name == PlannerDict[4]).Text;
-                }
-                break;
                 break;
             case "Developer":
                 user = servise.GetUser() as Developer;
@@ -353,17 +282,12 @@
                 {
                     text3 = docss.Find(x => x.Name == PlannerDict[2]).Text;
                 }
-                if (docss.Find(x => x.Name == PlannerDict[3]) != null && docss.Find(x => x.Name == PlannerDict[3]).Name == PlannerDict[3])
-                {
-                    text4 = docss.Find(x => x.Name == PlannerDict[3]).Text;
-                }
-                if (docss.Find(x => x.Name == PlannerDict[4]) != null && docss.Find(x => x.Name == PlannerDict[4]).Name == PlannerDict[4])
-                {
-                    text5 = docss.Find(x => x.Name == PlannerDict[4]).Text;
-                }
+
                 break;
         }
+
     }
+
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
@@ -382,13 +306,13 @@
         {
             servise.GetProject().Documentss.Remove(docss.Find(x => x.Name == PlannerDict[i]));
         }
-        switch (i)
+        switch(i)
         {
             case 0:
                 if (text1 != null && text1 != string.Empty)
                 {
                     newDocs.Text = text1;
-                    newDocs.Name = (docss.Find(x => x.Name == PlannerDict[i])).Name;
+                    newDocs.Name = PlannerDict[i];
                 }
                 else
                     return;
@@ -397,7 +321,7 @@
                 if (text2 != null && text2 != string.Empty)
                 {
                     newDocs.Text = text2;
-                    newDocs.Name = (docss.Find(x => x.Name == PlannerDict[i])).Name;
+                    newDocs.Name = PlannerDict[i];
                 }
                 else
                     return;
@@ -406,25 +330,7 @@
                 if (text3 != null && text3 != string.Empty)
                 {
                     newDocs.Text = text3;
-                    newDocs.Name = (docss.Find(x => x.Name == PlannerDict[i])).Name;
-                }
-                else
-                    return;
-                break;
-            case 3:
-                if (text4 != null && text4 != string.Empty)
-                {
-                    newDocs.Text = text4;
-                    newDocs.Name = (docss.Find(x => x.Name == PlannerDict[i])).Name;
-                }
-                else
-                    return;
-                break;
-            case 4:
-                if (text5 != null && text5 != string.Empty)
-                {
-                    newDocs.Text = text5;
-                    newDocs.Name = (docss.Find(x => x.Name == PlannerDict[i])).Name;
+                    newDocs.Name = PlannerDict[i];
                 }
                 else
                     return;
@@ -432,15 +338,8 @@
         }
 
         servise.GetProject().Documentss.Add(newDocs);
-        Mongo.ReplaceProject(servise.GetProject().Name, servise.GetProject());
-    }
-    private void DeleteFromDBDeveloper(string fileName)
-    {
-        if (docs.Find(x => x.Name == fileName) != null)
-        {
-            servise.GetProject().Documents.Remove(docs.Find(x => x.Name == fileName));
-        }
-        FileSystemService fs = new FileSystemService();
+
+
         Mongo.ReplaceProject(servise.GetProject().Name, servise.GetProject());
     }
 
@@ -469,11 +368,26 @@
             return;
         }
     }
+    private void DeleteFromDBDeveloper(string fileName)
+    {
+        if (docs.Find(x => x.Name == fileName) != null)
+        {
+            servise.GetProject().Documents.Remove(docs.Find(x => x.Name == fileName));
+        }
+        FileSystemService fs = new FileSystemService();
+        Mongo.ReplaceProject(servise.GetProject().Name, servise.GetProject());
+    }
+
+    private void Load(string name)
+    {
+        FileSystemService fs = new FileSystemService();
+        fs.DownloadToLocal(docs.Find(x => x.Name == name).FileName);
+    }
 
     private void ApplyDeveloper(string name)
     {
         var newDoc = new DeveloperDocument(name, true)
-            {
+        {
                 FileName = docs.Find(x => x.Name == name).FileName
             };
         if (docs.Find(x => x.Name == name) != null)
@@ -486,7 +400,10 @@
 
     private void Apply(string name)
     {
-        var newDoc = new PlannerDocument(name, true);
+        var newDoc = new PlannerDocument(name, true)
+        {
+            Text = (docss.Find(x => x.Name == name).Text)
+        };
         if (docss.Find(x => x.Name == name) != null)
         {
             servise.GetProject().Documentss.Remove(docss.Find(x => x.Name == name));
@@ -496,26 +413,22 @@
     }
 
     Dictionary<int, string> DeveloperDict = new Dictionary<int, string>()
-    { {0, "Акт обследования и выбора трассы сети водоснабжения" },
-      {1, "Акт обследования и выбора места под проектируемую скважину" },
-      {2, "Согласованный ситуационной план (М1:10000 или М1:25000) с нанесением источников воды (скважин, родников и т.п.), существующих водонапорных башен, предполагаемой трассой водопровода и места врезки в существующую сеть" },
-      {3, "План населённого пункта в М1:1000 или М1:500 (топографическая съемка)" },
-      {4, "Техинические условия на водоснабжение" },
-      {5, "Техинические условия на электроснабжение (для насосной станции первого или второго подъема" },
-      {6, "Градостроительный план земельного участка" },
-      {7, "Справка согласования с собственниками земельных участков" },
-      {8, "Докумен, подтверждающий проведение межевания с присвоением кадастрового номера земельного участка под строительство водопровода и сооружений на нем" },
-      {9, "Заключение Органа Ростпотребнадзора санитарно-эпидемиологической службы по отводу" },
-      {10, "Сведения о наличии водозаборных скважин (рдников) на территории хозяйства" },
+    { {0, "Письмо-обращение на имя Президента, Премьер-Министра, Минстрой РТ" },
+      {1, "Задание на проектирование" },
+      {2, "Ситуационный план (утвержденный исполкомом)" },
+      {3, "Технические условия на присоединение кгазораспределительной сети (№, дата,срок действий Технических условий)" },
+      {4, "Технический паспорт (план БТИ) объекта СКБ" },
+      {5, "Технический паспорт (план БТИ) существующей котельной" },
+      {6, "АКТ обследования объекта" },
+      {7, "Технические условия на сети электроснабжение, водоснабжения, водоотведения при установке БМК" },
+      {8, "Согласование посадки котельной" },
     };
 
     Dictionary<int, string> PlannerDict = new Dictionary<int, string>()
     {
       {0, "Диаметр (мм) трубопровода и протяженность линейного объекта (м)" },
-      {1, "Производительность БОС, м3/сут" },
-      {2, "кол.-во (шт) и производительность КНС (м3/ч)" },
-      {3, "Сметная стоимость работ, тыс. руб." },
-      {4, "Срок разработки проектной документации, месяцев" },
+      {1, "Сметная стоимость работ, тыс. руб." },
+      {2, "Срок разработки проектной документации,месяцев" },
     };
 }
 

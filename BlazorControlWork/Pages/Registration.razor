@@ -1,7 +1,14 @@
 ﻿@page "/registration"
-@using BlazorControlWork.Data
-@inject NavigationManager NavigationManager
-<div class="mask d-flex align-items-center h-100 gradient-custom-3">
+
+<PageTitle>Registration</PageTitle>
+
+@namespace BlazorControlWork.Data
+@using System.Text.RegularExpressions;
+
+@inject NavigationManager manager
+@inject SingletonServise servise
+
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
     <div class="container h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
@@ -16,7 +23,7 @@
                 </div>
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example1cg">Your phone number</label>
-                  <input type="text" maxlength="11" id="form3Example1cg" class="form-control form-control-lg" @bind-value=Telephone  onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
+                  <input type="text" maxlength="11" id="form3Example1cg" class="form-control form-control-lg" @bind-value=PhoneNumber onkeyup="this.value = this.value.replace(/[^0-9]/ig, '')" />
                 </div>
                 
                 <div class="form-outline mb-4">
@@ -31,7 +38,7 @@
 
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example4cdg">Repeat your password</label>
-                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" @bind-value=Password2/>
+                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" @bind-value=RepeatPassword/>
                 </div>
 
                 <div class="form-outline mb-4">
@@ -40,23 +47,22 @@
                      class="form-control">
                     <option value="Customer">Customer</option>
                     <option value="Developer">Developer</option>
-                    <option value="Designer">Designer</option>
+                    <option value="Planner">Planner</option>
                   </select>
-                  </div>
-                  @if (JobTitle == "Customer")
-                  {
+                </div>
+                @if (JobTitle == "Customer")
+                {
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="form3Example4cdg">Your department </label>
-                        <select @bind=Department
-                            class="form-control">
+                    <label class="form-label" for="form3Example4cdg">Your department </label>
+                            <select @bind=Department
+                            class="form-control" >
                             <option value="Gasification">Gasification</option>
                             <option value="Water supply">Water supply</option>
                         </select>
                     </div>
-                    <br>
-                  }
-
-                            <div class="d-flex justify-content-center">
+                    <br>                
+                }
+                <div class="d-flex justify-content-center">
                   <button type="button"
                     class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" @onclick=RegistrClick>Register</button>
                 </div>
@@ -73,36 +79,45 @@
       </div>
     </div>
   </div>
+
 @code {
-    private string Name = "";
-    private string Telephone = "";
-    private string Email = "";
-    private string Login = "";
-    private string Password = "";
-    private string Password2 = "";
-    private string Position = "";
-    private string JobTitle = "";
-    private string Department = string.Empty;
-    private bool Error = false;
-    private string ErrorText = "";
+    string Login = string.Empty;
+    string PhoneNumber = string.Empty;
+    string Email = string.Empty;
+    string Password = string.Empty;
+    string RepeatPassword = string.Empty;
+    bool Error = false;
+    string ErrorText = string.Empty;
+    string JobTitle = string.Empty;
+    string Department = string.Empty;
+
 
     private void RegistrClick()
     {
-        var users = MongoExamples.FindAll();
-        foreach (var user in users)
+        var users = Mongo.FindAll();
+        if (!Email.Contains('@'))
+        {
+            Error = true;
+            ErrorText = "Неверная почта";
+            return;
+        }
+        else
+        {
+            Error = false;
+        }
+        foreach(var user in users)
         {
             if (Login == user.Login)
             {
                 Error = true;
-                ErrorText = "Такой логин уже есть!";
+                ErrorText = "Такой логин уже есть";
                 return;
             }
-            else
-            {
+            else{
                 Error = false;
             }
         }
-        if (Password != Password2)
+        if(Password != RepeatPassword)
         {
             Error = true;
             ErrorText = "Пароль не сходится";
@@ -112,41 +127,34 @@
         {
             Error = false;
         }
-        if (Telephone.Length != 11)
-        {
-            Error = true;
-            ErrorText = "Неправильный номер телефона";
-            return;
-        }
-        if (Login != "" && (Telephone != "" && Telephone.Length == 11) && Email != "" && Password != "" && Password2 != "" && JobTitle != "")
+        if (Login != "" && (PhoneNumber != "" && PhoneNumber.Length == 11) && Email != "" && Password != "" && RepeatPassword != "" && JobTitle != "")
         {
             User user = null;
             switch (JobTitle)
             {
                 case "Customer":
-                    user = new Customer(Telephone, Login, Email, Password, Position)
+                    user = new Customer(Login, PhoneNumber, Email, Password)
                     {
                         Department = this.Department
                     };
                     break;
 
                 case "Developer":
-                    user = new Developer(Telephone, Login, Email, Password);
+                    user = new Developer(Login, PhoneNumber, Email, Password);
                     break;
 
-                case "Designer":
-                    user = new Designer(Telephone, Login, Email, Password);
+                case "Planner":
+                    user = new Planner(Login, PhoneNumber, Email, Password);
                     break;
             }
-            MongoExamples.AddToDB(user);
-            ActiveUser.user = user;
-            ActiveUser.IsUserActive = true;
-            NavigationManager.NavigateTo("profile");
+            Mongo.AddToDB(user);
+            servise.SetUser(user);
+            manager.NavigateTo("profile");
         }
         else
         {
             Error = true;
-            ErrorText = "Заполните все данные!";
+            ErrorText = "Заполните все данные";
             return;
         }
     }

@@ -1,14 +1,18 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace BlazorControlWork.Data
+namespace BlazorControlWork
 {
     public class Customer : User
     {
+        public Customer(string login, string phoneNumber, string email, string password) : base (login, phoneNumber, email, password)
+        { }
+
         [BsonIgnoreIfNull]
-        public string Name { get; set; }
+        public string FullName { get; set; }
+
+        [BsonIgnoreIfNull]
         public string Department { get; set; }
-        [BsonIgnoreIfNull]
-        public string Position { get; set; }
 
         [BsonIgnoreIfNull]
         public List<Project> ProjectGasification = new List<Project>();
@@ -16,10 +20,5 @@ namespace BlazorControlWork.Data
         [BsonIgnoreIfNull]
         public List<Project> ProjectWaterSupply = new List<Project>();
 
-        public Customer(string telephone, string email, string password, string login, string department) :
-            base(telephone, email, password, login)
-        {
-            Department = department;
-        }
     }
 }

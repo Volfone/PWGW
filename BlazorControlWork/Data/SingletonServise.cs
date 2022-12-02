@@ -1,5 +1,4 @@
-﻿
-namespace BlazorControlWork.Data
+﻿namespace BlazorControlWork
 {
     public class SingletonServise
     {

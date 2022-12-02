@@ -1,5 +1,6 @@
 ﻿@using BlazorControlWork.Data
 @inherits LayoutComponentBase
+@inject SingletonServise servise
 
 <PageTitle>BlazorControlWork</PageTitle>
 
@@ -10,16 +11,16 @@
 
     <main>
         <div class="top-row px-4">
-            @if (!ActiveUser.IsUserActive)
+            @if (@servise.GetUser() == null)
             {
                 <a href="authorization">Authorization</a>
                 <a href="registration">Registration</a>
             }
             else
             {
-                <a href="profile">@ActiveUser.user.Login</a>
+                <a href="profile">@servise.GetUser().Login</a>
             }
-            
+
         </div>
 
         <article class="content px-4">
@@ -28,6 +29,6 @@
     </main>
 </div>
 
-@code{
+@code {
 
 }

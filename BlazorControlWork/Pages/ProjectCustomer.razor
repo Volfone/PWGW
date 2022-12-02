@@ -1,15 +1,15 @@
 ﻿@page "/projectCustomer"
 
 @using Microsoft.Extensions.Logging
-
-@using BlazorControlWork.Data
-@inject NavigationManager Navigation
+@namespace BlazorControlWork.Data
+@inject SingletonServise servise
+@inject NavigationManager manager
 
 @if (CheckInfo())
 {
     <p>
         <label>
-            Заказчик @customer.Name
+            Заказчик @customer.FullName
         </label>
     </p>
         <table class="table">
@@ -27,7 +27,7 @@
                     <tr>
                         <td>@project.Name</td>
                         <td>@project.Developer.Login</td>
-                        <td>@project.Designer.Login</td>
+                        <td>@project.Planner.Login</td>
                         <td>
                         <button type="button" class="btn btn-info" @onclick="() => CheckProject(project)">Open project</button>
                         </td>
@@ -50,25 +50,25 @@ else
 
     protected override void OnInitialized()
     {
-        customer = ActiveUser.user as Customer;
+        customer = servise.GetUser() as Customer;
 
     }
 
     private void CreateProject()
     {
-        Navigation.NavigateTo("projectCreate");
+        manager.NavigateTo("projectCreate");
     }
 
     private void CheckProject(Project project)
     {
-        ActiveUser.project = MongoExamples.FindProject(project.Name);
+        servise.SetProject(Mongo.FindProject(project.Name));
         if (customer.Department == "Gasification")
         {
-            Navigation.NavigateTo("projectGasification");
+            manager.NavigateTo("projectGasification");
         }
         else
         {
-            Navigation.NavigateTo("projectWaterSupply");
+            manager.NavigateTo("projectWaterSupply");
         }
     }
 
@@ -86,7 +86,7 @@ else
 
     private bool CheckInfo()
     {
-        if ((customer.Name == null || customer.Name == string.Empty) || (customer.Telephone == null || customer.Telephone == string.Empty)
+        if ((customer.FullName == null || customer.FullName == string.Empty) || (customer.PhoneNumber == null || customer.PhoneNumber == string.Empty)
         || (customer.Email == null || customer.Email == string.Empty))
         {
             return false;

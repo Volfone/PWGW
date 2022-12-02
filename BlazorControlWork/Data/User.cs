@@ -1,27 +1,32 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Routing;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Numerics;
+using System.Threading;
 
-namespace BlazorControlWork.Data
+namespace BlazorControlWork
 {
-    [BsonKnownTypes(typeof(Customer), typeof(Developer), typeof(Designer))]
+    [BsonKnownTypes(typeof(Customer), typeof(Developer), typeof(Planner))]
     public class User
     {
-        [BsonId]
-        [BsonIgnoreIfDefault]
-        public ObjectId _id;
-
-        public string Telephone { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Login { get; set; }
-
-        public User(string telephone, string email, string password, string login)
+        public User(string login, string phoneNumber, string email, string password)
         {
-            Telephone = telephone;
+            Login = login;
+            PhoneNumber = phoneNumber;
             Email = email;
             Password = password;
-            Login = login;
         }
+
+        [BsonId]
+        [BsonIgnoreIfDefault]
+        ObjectId _id;
+
+        public string Login { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
     }
 }

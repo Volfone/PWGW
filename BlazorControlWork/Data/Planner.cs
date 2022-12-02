@@ -3,15 +3,15 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BlazorControlWork
 {
-    public class Developer : User
+    public class Planner : User
     {
-        public Developer(string login, string phoneNumber, string email, string password) : base (login, phoneNumber, email, password)
+        public Planner(string login, string phoneNumber, string email, string password) : base (login, phoneNumber, email, password)
         {
 
         }
 
         [BsonIgnoreIfNull]
-        public string Name { get; set; }
+        public string NameOrganization { get; set; }
 
         [BsonIgnoreIfNull]
         public string OGRN { get; set; }
@@ -23,13 +23,12 @@ namespace BlazorControlWork
         public string KPP { get; set; }
 
         [BsonIgnoreIfNull]
-        public string Address { get; set; }
+        public string NameDirecor { get; set; }
 
         [BsonIgnoreIfNull]
-        public string HeadName { get; set; }
+        public string NameChiefEngineer { get; set; }
 
         [BsonIgnoreIfNull]
         public List<Project> Projects = new List<Project>();
-
     }
 }

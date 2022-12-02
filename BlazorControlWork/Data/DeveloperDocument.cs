@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Threading;
 
-namespace BlazorControlWork.Data
+namespace BlazorControlWork
 {
     public class DeveloperDocument
     {

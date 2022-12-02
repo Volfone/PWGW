@@ -3,11 +3,11 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Threading;
 
-namespace BlazorControlWork.Data
+namespace BlazorControlWork
 {
-    public class DesignerDocument
+    public class PlannerDocument
     {
-        public DesignerDocument(string name, bool itsOK)
+        public PlannerDocument(string name, bool itsOK)
         {
             Name = name;
             ItsOK = itsOK;

@@ -4,14 +4,14 @@
 
 @namespace BlazorControlWork.Data
 
-@inject NavigationManager Navigation
+@inject NavigationManager manager
+@inject SingletonServise servise
 
 <p>
     <label>
         Создание проекта
     </label>
 </p>
-<section style="background-color: #eee;">
     <div>
     <label> Название проекта: </label>
     <input type="text" class="text-muted mb-0" @bind-value=projectName /><br><br>
@@ -27,10 +27,10 @@
         }
         </select><br><br>
 
-    <label>Select designer </label>
-        <select @bind=designer>
+    <label>Select Planner </label>
+    <select @bind=planner >
         <option></option>
-        @foreach (var i in designers)
+        @foreach (var i in planners)
         {
             <option value="@i.Login">@i.Login</option>
         }
@@ -48,36 +48,35 @@
         </div>
     }
     </div>
-</section>
 
 @code {
     User user;
     string projectName;
     string developer;
-    string designer;
+    string planner;
     List<User> developers;
-    List<User> designers;
+    List<User> planners;
     bool Error;
     string ErrorText;
 
     protected override void OnInitialized()
     {
-        developers = MongoExamples.FindAllDeveloper();
-        designers = MongoExamples.FindAllDesigners();
-        user = ActiveUser.user;
+        developers = Mongo.FindAllDeveloper();
+        planners = Mongo.FindAllPlanner();
+        user = servise.GetUser();
     }
 
     private void CreateProject()
     {
-        if (developer == null || developer == string.Empty || designer == null || designer == string.Empty
+        if (developer == null || developer == string.Empty || planner == null || planner == string.Empty
             || projectName == null || projectName == string.Empty)
         {
             Error = true;
             ErrorText = "Введите все данные";
             return;
         }
-        Project project = new Project(projectName, (user as Customer).Department, MongoExamples.Find(developer), MongoExamples.Find(designer));
-        ActiveUser.project = project;
+        Project project = new Project(projectName, (user as Customer).Department, Mongo.Find(developer), Mongo.Find(planner));
+        servise.SetProject(project);
         if (project.Type == "Gasification")
         {
             (user as Customer).ProjectGasification.Add(project);
@@ -86,14 +85,14 @@
         {
             (user as Customer).ProjectWaterSupply.Add(project);
         }
-        var newDeveloper = (MongoExamples.Find(developer)) as Developer;
+        var newDeveloper = (Mongo.Find(developer)) as Developer;
         newDeveloper.Projects.Add(project);
-        var newDesigner = (MongoExamples.Find(designer)) as Designer;
-        newDesigner.Projects.Add(project);
-        MongoExamples.Replace(user.Login, (user as Customer));
-        MongoExamples.Replace(((MongoExamples.Find(developer)) as Developer).Login, newDeveloper);
-        MongoExamples.Replace(((MongoExamples.Find(designer)) as Designer).Login, newDesigner);
-        MongoExamples.AddProjectToDB(project);
-        Navigation.NavigateTo("projectCustomer");
+        var newPlanner = (Mongo.Find(planner)) as Planner;
+        newPlanner.Projects.Add(project);
+        Mongo.Replace(user.Login, (user as Customer));
+        Mongo.Replace((Mongo.Find(developer)).Login, newDeveloper);
+        Mongo.Replace((Mongo.Find(planner)).Login, newPlanner);
+        Mongo.AddProjectToDB(project);
+        manager.NavigateTo("projectCustomer");
     }
 }

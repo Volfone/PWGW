@@ -1,0 +1,228 @@
+﻿@page "/profile"
+
+<PageTitle>Profile</PageTitle>
+
+@namespace BlazorControlWork.Data
+
+@inject NavigationManager manager
+@inject SingletonServise servise
+
+<div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Login</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0"> @user.Login </p>
+                    </div>
+                </div>
+                <hr>
+                    @if (user.GetType().Name == "Customer")
+                    {
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Customer).FullName) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Department</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@((user as Customer).Department)</p>
+                            </div>
+                        </div>
+                        <hr>
+                    }
+                    @if (user.GetType().Name == "Developer")
+                    {
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).Name) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">OGRN</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).OGRN) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">TIN</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).TIN) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">KPP</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).KPP) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).Address) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">HeadName</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Developer).HeadName) </p>
+                            </div>
+                        </div>
+                        <hr>
+                    }
+                    @if (user.GetType().Name == "Planner")
+                    {
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Name organization</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).NameOrganization) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">OGRN</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).OGRN) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">TIN</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).TIN) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">KPP</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).KPP) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Name direcor</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).NameDirecor) </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Name chief engineer</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"> @((user as Planner).NameChiefEngineer) </p>
+                            </div>
+                        </div>
+                        <hr>
+                    }
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@user.Email</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Phone number</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@user.PhoneNumber</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="btnProfil">
+                <button type="button"
+                        class="btn btn-success" @onclick=Editing>
+                    Editing
+                </button>
+            <button type="button" style="margin-left: 25px;" id="btnProf"
+                        class="btn btn-danger" @onclick=LogOut>
+                    Log out
+                </button>
+            </div>
+        </div>
+    </div>
+<button type="button" style="margin-top: 15px;" id="btnProf"
+            class="btn btn-info" @onclick=Projects>
+        Projects
+    </button>
+@code {
+    private User user;
+
+    protected override void OnInitialized()
+    {
+        user = servise.GetUser();
+    }
+
+    private void Projects()
+    {
+        switch (user.GetType().Name)
+        {
+            case "Customer":
+                manager.NavigateTo("projectCustomer");
+            break;
+            case "Developer":
+                manager.NavigateTo("projectDeveloperPlanner");
+                break;
+            case "Planner":
+                manager.NavigateTo("projectDeveloperPlanner");
+                break;
+        }
+        
+    }
+
+    private void LogOut()
+    {
+        servise.SetUser(null);
+        manager.NavigateTo("authorization");
+    }
+
+    private void Editing()
+    {
+        manager.NavigateTo("editing");
+    }
+}
