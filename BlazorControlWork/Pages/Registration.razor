@@ -105,6 +105,12 @@
         {
             Error = false;
         }
+        if (PhoneNumber.Length < 11)
+        {
+            Error = true;
+            ErrorText = "Неверный телефон";
+            return;
+        }
         foreach(var user in users)
         {
             if (Login == user.Login)
@@ -117,7 +123,7 @@
                 Error = false;
             }
         }
-        if(Password != RepeatPassword)
+        if (Password != RepeatPassword)
         {
             Error = true;
             ErrorText = "Пароль не сходится";
